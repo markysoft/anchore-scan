@@ -36,3 +36,9 @@ jobs:
           image-reference: "defradigital/dotnetcore:1.2.0-dotnet3.1"
           fail-build: true
           custom-policy-path: ./anchore-policy.json
+
+      - name: Archive anchore report
+        uses: actions/upload-artifact@v2
+        with:
+          name: anchore-reports
+          path: anchore-reports
