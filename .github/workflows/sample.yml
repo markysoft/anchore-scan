@@ -1,48 +1,22 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "scan"
   scan:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: run anchore scan
         env:
           imagesToScan: defradigital/node:1.2.1-node12.18.3 defradigital/dotnetcore:1.2.0-dotnet3.1
         run: curl -s https://ci-tools.anchore.io/inline_scan-v0.7.2 | bash -s -- -p -r -f -b ./anchore-policy.json $imagesToScan
-
-      # - name: Scan node image
-      #   uses: anchore/scan-action@v1
-      #   with:
-      #     image-reference: "defradigital/node:1.2.1-node12.18.3"
-      #     fail-build: true
-      #     custom-policy-path: ./anchore-policy.json
-      #     include-app-packages: true
-
-      # - name: Scan .net core image
-      #   if: ${{ always() }}
-      #   uses: anchore/scan-action@v1
-      #   with:
-      #     image-reference: "defradigital/dotnetcore:1.2.0-dotnet3.1"
-      #     fail-build: true
-      #     custom-policy-path: ./anchore-policy.json
-      #     include-app-packages: true
 
       - name: Archive anchore report
         if: ${{ failure() }}

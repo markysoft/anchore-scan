@@ -1,0 +1,50 @@
+name: SCAN-PARALLEL
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  scan-node:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Scan node image
+        uses: anchore/scan-action@v1
+        with:
+          image-reference: "defradigital/node:1.2.1-node12.18.3"
+          fail-build: true
+          custom-policy-path: ./anchore-policy.json
+          include-app-packages: true
+
+      - name: Archive anchore report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: anchore-report-node
+          path: anchore-reports
+  
+  scan-netcore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Scan .net core image
+        if: ${{ always() }}
+        uses: anchore/scan-action@v1
+        with:
+          image-reference: "defradigital/dotnetcore:1.2.0-dotnet3.1"
+          fail-build: true
+          custom-policy-path: ./anchore-policy.json
+          include-app-packages: true
+
+      - name: Archive anchore report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: anchore-reports-netcore
+          path: anchore-reports
