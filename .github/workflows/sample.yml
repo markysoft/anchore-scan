@@ -12,8 +12,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains a single job called "scan"
+  scan:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -23,13 +23,17 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: run anchore scan
-        run: curl -s https://ci-tools.anchore.io/inline_scan-v0.7.2 | bash -s -- -p -r -f -b ./anchore-policy.json defradigital/node:1.2.1-node12.18.3
+        env:
+          imagesToScan: defradigital/node:1.2.1-node12.18.3 defradigital/dotnetcore:1.2.0-dotnet3.1
+        run: curl -s https://ci-tools.anchore.io/inline_scan-v0.7.2 | bash -s -- -p -r -f -b ./anchore-policy.json ${imagesToScan}
+
       # - name: Scan node image
       #   uses: anchore/scan-action@v1
       #   with:
       #     image-reference: "defradigital/node:1.2.1-node12.18.3"
       #     fail-build: true
       #     custom-policy-path: ./anchore-policy.json
+      #     include-app-packages: true
 
       # - name: Scan .net core image
       #   if: ${{ always() }}
@@ -38,8 +42,10 @@ jobs:
       #     image-reference: "defradigital/dotnetcore:1.2.0-dotnet3.1"
       #     fail-build: true
       #     custom-policy-path: ./anchore-policy.json
+      #     include-app-packages: true
 
       - name: Archive anchore report
+       if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: anchore-reports
