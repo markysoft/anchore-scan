@@ -23,7 +23,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: anchore-report-node
+          name: anchore-reports-node
           path: anchore-reports
   
   scan-netcore:
