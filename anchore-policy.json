@@ -24,7 +24,8 @@
         { "id": "item1", "gate": "vulnerabilities", "trigger": "package", "trigger_id": "CVE-2020-8116+dot-prop" },
         { "id": "item2", "gate": "vulnerabilities", "trigger": "package", "trigger_id": "CVE-2020-7598+minimist" },
         { "id": "item3", "gate": "vulnerabilities", "trigger": "package", "trigger_id": "CVE-2020-7608+yargs-parser" },
-        { "id": "item4", "gate": "vulnerabilities", "trigger": "package", "trigger_id": "GHSA-ff7x-qrg7-qggm+dot-prop" }
+        { "id": "item4", "gate": "vulnerabilities", "trigger": "package", "trigger_id": "CVE-2020-7754+npm-user-validate" },
+        { "id": "item5", "gate": "vulnerabilities", "trigger": "package", "trigger_id": "GHSA-ff7x-qrg7-qggm+dot-prop" }
       ]
     }
   ],
