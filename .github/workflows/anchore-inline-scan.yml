@@ -15,7 +15,7 @@ jobs:
 
       - name: run anchore scan
         env:
-          imagesToScan: defradigital/node:1.2.1-node12.18.3 defradigital/dotnetcore:1.2.0-dotnet3.1
+          imagesToScan: defradigital/node:1.2.1-node12.18.3 defradigital/node:1.2.1-node14.15.0 defradigital/dotnetcore:1.2.0-dotnet3.1
         run: curl -s https://ci-tools.anchore.io/inline_scan-v0.8.2 | bash -s -- -p -r -f -b ./anchore-policy.json $imagesToScan
 
       - name: Archive anchore report

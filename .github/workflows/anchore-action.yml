@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  scan-node:
+  scan-node12:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,28 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: anchore-reports-node
+          name: anchore-reports-node12
+          path: anchore-reports
+
+  scan-node14:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Scan node image
+        uses: anchore/scan-action@v1
+        with:
+          image-reference: "defradigital/node:1.2.1-node14.15.0"
+          fail-build: true
+          custom-policy-path: ./anchore-policy.json
+          include-app-packages: true
+
+      - name: Archive anchore report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: anchore-reports-node12
           path: anchore-reports
   
   scan-netcore:
